@@ -26,3 +26,19 @@ print(apple.head())
 
 
 f = pdr.DataReader("F", "yahoo", start, end)
+
+import matplotlib.pyplot as plt   # Import matplotlib
+# This line is necessary for the plot to appear in a Jupyter notebook
+
+# Control the default size of figures in this Jupyter notebook
+
+# pylab.rcParams['figure.figsize'] = (15, 9)   # Change the size of plots
+# plt.plot([1,2,3,4])
+# plt.show()
+apple["Adj Close"].plot(grid = True) # Plot the adjusted closing price of AAPL
+print(apple["Adj Close"])
+apl = apple["Adj Close"]
+
+
+plt.plot(apl)
+plt.show()
