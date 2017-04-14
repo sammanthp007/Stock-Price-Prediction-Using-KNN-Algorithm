@@ -13,10 +13,12 @@ import datetime
 
 import matplotlib.pyplot as plt   # Import matplotlib
 
-from plottingfuncs import sayHello
+import plotly.plotly as py
+import plotly
+import plotly.graph_objs as go
 
 # We will look at stock prices over the past year, starting at January 1, 2016
-start = datetime.datetime(2007,1,1)
+start = datetime.datetime(2015,1,1)
 end = datetime.date.today()
 
 # Let's get Apple stock data; Apple's ticker symbol is AAPL
@@ -28,7 +30,16 @@ print(apple.head())
 print(apple["Adj Close"])
 apl = apple["Adj Close"]
 
-sayHello()
 
 plt.plot(apl)
-plt.show()
+# plt.show()
+
+df = web.DataReader('AAPL', 'yahoo', start, end)
+trace = go.Candlestick(x=df.index,
+                       open=df.Open,
+                       high=df.High,
+                       low=df.Low,
+                       close=df.Close
+                       )
+data = [trace]
+plotly.offline.plot(data)
