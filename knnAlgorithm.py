@@ -18,9 +18,11 @@ def loadDataset(filename, split, trainingSet=[], testSet=[], content_header=[]):
         lines = csv.reader(csvfile)
         # dataset is a list of all data, where each item is a line as list
         dataset = list(lines)
+        # minus 1 because we are predicting for next day
         for x in range(len(dataset) - 1):
             # convert the content to float
-            for y in range(len(content_header)):
+            # minus 1 because last is string for up or down
+            for y in range(len(content_header) - 1):
                 dataset[x][y] = float(dataset[x][y])
             if random.random() < split:
                 trainingSet.append(dataset[x])
@@ -67,7 +69,7 @@ def getResponse(neighbors):
     return sortedVotes[0][0]
 
 
-def getAccuracyForBinary(testSet, predictions):
+def getAccuracy(testSet, predictions):
     correct = 0
     for x in range(len(testSet)):
         if testSet[x][-1] == predictions[x]:
@@ -75,7 +77,7 @@ def getAccuracyForBinary(testSet, predictions):
     return (correct/float(len(testSet))) * 100.0
 
 
-def getAccuracy(testSet, predictions):
+def getAccuracy1(testSet, predictions):
     correct = 0
     for x in range(len(testSet)):
         if RMSD(testSet[x][-1], predictions[x]) < 1:
@@ -89,7 +91,7 @@ def RMSD(X, Y):
 
 def main():
     # iv = ["sepal length", "sepal width", "petal length", "petal width"]
-    iv = ["high", "low", "closing adj"]
+    iv = ["open", "high", "low", "closing adj", "state change"]
     trainingSet = []
     testSet = []
     # changable values
@@ -109,7 +111,7 @@ def main():
         neighbors = getNeighbors(trainingSet, testSet[x], k)
         result = getResponse(neighbors)
         predictions.append(result)
-        print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+        # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
 
     accuracy = getAccuracy(testSet, predictions)
 
@@ -118,17 +120,29 @@ def main():
 
     print('Accuracy: ' + repr(accuracy) + '%')
 
-main()
 
-def getData(filename, startdate, enddate):
+def getData1(filename, startdate, enddate):
     apple = web.DataReader('AAPL', 'yahoo', startdate, enddate)
+    print(apple.keys())
     with open('apple.csv', 'wb') as csvfile:
         stockwriter = csv.writer(csvfile, quotechar=',')
         for ind in range(len(apple.Open)):
             stockwriter.writerow([apple.High[ind]] + [apple.Low[ind]] + [apple['Adj Close'][ind]])
 
+def change(today, yest):
+    if today >= yest:
+        return 'up'
+    return 'down'
 
+def getData(filename, startdate, enddate):
+    apple = web.DataReader('AAPL', 'yahoo', startdate, enddate)
+    with open('apple.csv', 'wb') as csvfile:
+        stockwriter = csv.writer(csvfile, quotechar=',')
+        for ind in range(1, len(apple.Open)):
+            stockwriter.writerow([apple.Open[ind - 1]] + [apple.High[ind - 1]] + [apple.Low[ind - 1]] + [apple['Adj Close'][ind - 1]] + [change(apple['Adj Close'][ind], apple['Adj Close'][ind - 1])])
 
 start = datetime.datetime(2011,1,1)
 enddate = datetime.date.today()
+
 getData('apple.csv', start, enddate)
+main()
