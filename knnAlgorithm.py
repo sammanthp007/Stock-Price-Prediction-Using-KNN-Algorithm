@@ -28,10 +28,6 @@ def loadDataset(filename, split, trainingSet=[], testSet=[], content_header=[]):
                 testSet.append(dataset[x])
 
 
-
-
-
-
 def euclideanDistance(instance1, instance2, length):
     distance = 0
     for x in range(length):
@@ -80,13 +76,20 @@ def getAccuracy(testSet, predictions):
 
 
 def main():
-    iv = ["sepal length", "sepal width", "petal length", "petal width"]
+    # iv = ["sepal length", "sepal width", "petal length", "petal width"]
+    iv = ["high", "low", "closing adj"]
     trainingSet = []
     testSet = []
     # changable values
     split = 0.67
+    # number of neighbors
     k = 3
-    loadDataset('iris.data', split, trainingSet, testSet, iv)
+    # name of file to get and set data to
+    filename = 'apple.csv'
+    loadDataset(filename, split, trainingSet, testSet, iv)
+
+    print("Train: " + repr(len(trainingSet)))
+    print("Test: " + repr(len(testSet)))
 
     # generate predictions
     predictions = []
@@ -94,7 +97,7 @@ def main():
         neighbors = getNeighbors(trainingSet, testSet[x], k)
         result = getResponse(neighbors)
         predictions.append(result)
-        # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+        print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
 
     accuracy = getAccuracy(testSet, predictions)
 
@@ -103,20 +106,19 @@ def main():
 
     print(trainingSet[0])
     print(testSet[0])
-    print("Train: " + repr(len(trainingSet)))
-    print("Train: " + repr(len(testSet)))
     print('Accuracy: ' + repr(accuracy) + '%')
 
 main()
 
-def getData():
-    start = datetime.datetime(2001,1,1)
-    end = datetime.date.today()
-    apple = web.DataReader('AAPL', 'yahoo', start, end)
-    print(type(apple))
-    for key in apple:
-        print key
-    print(apple)
-    print(len(apple))
+def getData(filename, startdate, enddate):
+    apple = web.DataReader('AAPL', 'yahoo', startdate, enddate)
+    with open('apple.csv', 'wb') as csvfile:
+        stockwriter = csv.writer(csvfile, quotechar=',')
+        for ind in range(len(apple.Open)):
+            stockwriter.writerow([apple.High[ind]] + [apple.Low[ind]] + [apple['Adj Close'][ind]])
 
-getData()
+
+
+start = datetime.datetime(2011,1,1)
+enddate = datetime.date.today()
+getData('apple.csv', start, enddate)
