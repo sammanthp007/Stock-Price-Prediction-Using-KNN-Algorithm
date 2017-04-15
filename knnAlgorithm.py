@@ -1,6 +1,7 @@
 import csv
 import random
 import math
+import operator
 
 # split the data into a training dataset and test dataset in ratio of 67/33
 def loadDataset(filename, split, trainingSet=[], testSet=[]):
@@ -28,12 +29,30 @@ def euclideanDistance(instance1, instance2, length):
     distance = 0
     for x in range(length):
         distance += pow((instance1[x] - instance2[x]), 2)
+    print
     return math.sqrt(distance)
 
-data1 = [2,3,4,'s']
-data2 = [4,4,4,'b']
-distance = euclideanDistance(data1, data2, 3)
-print(repr(distance))
+
+
+def getNeighbors(trainingSet, testInstance, k):
+    distance = []
+    length = len(testInstance)
+
+    for x in range((len(trainingSet))):
+        dist = euclideanDistance(testInstance, trainingSet[x], length)
+        distance.append((trainingSet[x], dist))
+    distance.sort(key=operator.itemgetter(1))
+    neighbors = []
+    for x in range(k):
+        neighbors.append(distance[x][0])
+    return neighbors
+
+
+trainSet = [[2, 2, 2, 'a'], [4, 4, 4, 'b']]
+testInstance = [5, 5, 5]
+k = 1
+neighbors = getNeighbors(trainSet, testInstance, 1)
+print(neighbors)
 
 
 iv = ["sepal length", "sepal width", "petal length", "petal width"]
