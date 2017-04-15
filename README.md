@@ -56,5 +56,10 @@ The kNN algorithm belongs to the family of
 machine learning, instance-based learning, sometimes called memory-based
 learning, is a family of learning algorithms that, instead of performing
 explicit generalization, compares new problem instances with instances seen in
-training, which have been stored in memory."), competitive learning and lazy
-learning algorithms.
+training, which have been stored in memory."), [competitive
+learning](https://en.wikipedia.org/wiki/Competitive_learning "Competitive
+learning is a form of unsupervised learning in artificial neural networks, in
+which nodes compete for the right to respond to a subset of the input data. A
+variant of Hebbian learning, competitive learning works by increasing the
+specialization of each node in the network.")
+and [lazy learning](https://en.wikipedia.org/wiki/Lazy_learning "lazy learning is a learning method in which generalization beyond the training data is delayed until a query is made to the system, as opposed to in eager learning, where the system tries to generalize the training data before receiving queries.") algorithms.
