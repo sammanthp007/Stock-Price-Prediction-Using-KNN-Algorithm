@@ -3,8 +3,8 @@ import random
 import math
 import operator
 
-# split the data into a training dataset and test dataset in ratio of 67/33
-def loadDataset(filename, split, trainingSet=[], testSet=[]):
+# split the data into a trainingdataset and testdataset in ratio of 67/33
+def loadDataset(filename, split, trainingSet=[], testSet=[], content_header=[]):
     # open the file
     # data format:
     # sepal length, sepal width, petal length, petal width, classification
@@ -17,7 +17,7 @@ def loadDataset(filename, split, trainingSet=[], testSet=[]):
         dataset = list(lines)
         for x in range(len(dataset) - 1):
             # convert the content to float
-            for y in range(len(iv)):
+            for y in range(len(content_header)):
                 dataset[x][y] = float(dataset[x][y])
             if random.random() < split:
                 trainingSet.append(dataset[x])
@@ -36,7 +36,8 @@ def euclideanDistance(instance1, instance2, length):
 # trainingSet
 def getNeighbors(trainingSet, testInstance, k):
     distance = []
-    length = len(testInstance)
+    # minus 1 because we are splitting our data and test also has known class
+    length = len(testInstance) - 1
 
     for x in range((len(trainingSet))):
         dist = euclideanDistance(testInstance, trainingSet[x], length)
@@ -49,6 +50,8 @@ def getNeighbors(trainingSet, testInstance, k):
     return neighbors
 
 
+# make all responses vote their classification, the one with the highest vote
+# wins
 def getResponse(neighbors):
     classVotes = {}
     for x in range(len(neighbors)):
@@ -60,14 +63,36 @@ def getResponse(neighbors):
     sortedVotes = sorted(classVotes.iteritems(), key=operator.itemgetter(1), reverse=True)
     return sortedVotes[0][0]
 
-neighbors = [[1,1,1,'b'], [2,2,2,'a'], [3,3,3,'b']]
-response = getResponse(neighbors)
-print(response)
 
-iv = ["sepal length", "sepal width", "petal length", "petal width"]
-trainingSet = []
-testSet = []
-loadDataset('iris.data', 0.66, trainingSet, testSet)
+def getAccuracy(testSet, predictions):
+    correct = 0
+    for x in range(len(testSet)):
+        if testSet[x][-1] == predictions[x]:
+            correct += 1
+    return (correct/float(len(testSet))) * 100.0
 
-print("Train: " + repr(len(trainingSet)))
-print("Train: " + repr(len(testSet)))
+
+def main():
+    iv = ["sepal length", "sepal width", "petal length", "petal width"]
+    trainingSet = []
+    testSet = []
+    # changable values
+    split = 0.67
+    k = 3
+    loadDataset('iris.data', split, trainingSet, testSet, iv)
+
+    # generate predictions
+    predictions = []
+    for x in range(len(testSet)):
+        neighbors = getNeighbors(trainingSet, testSet[x], k)
+        result = getResponse(neighbors)
+        predictions.append(result)
+        print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+
+    accuracy = getAccuracy(testSet, predictions)
+
+    print("Train: " + repr(len(trainingSet)))
+    print("Train: " + repr(len(testSet)))
+    print('Accuracy: ' + repr(accuracy) + '%')
+
+main()
