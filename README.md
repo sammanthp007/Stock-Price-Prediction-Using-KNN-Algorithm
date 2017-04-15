@@ -94,3 +94,8 @@ model.
 We first need to convert the flower measures that were loaded as strings into
 numbers that we can work with. Next we need to split the data set randomly into
 train and datasets. A ratio of 67/33 for train/test is a standard ratio used.
+
+
+## Reference
+[Implement
+kNN](http://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/)

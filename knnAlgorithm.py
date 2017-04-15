@@ -117,5 +117,6 @@ def getData():
     for key in apple:
         print key
     print(apple)
+    print(len(apple))
 
 getData()
