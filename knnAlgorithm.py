@@ -67,12 +67,24 @@ def getResponse(neighbors):
     return sortedVotes[0][0]
 
 
-def getAccuracy(testSet, predictions):
+def getAccuracyForBinary(testSet, predictions):
     correct = 0
     for x in range(len(testSet)):
         if testSet[x][-1] == predictions[x]:
             correct += 1
     return (correct/float(len(testSet))) * 100.0
+
+
+def getAccuracy(testSet, predictions):
+    correct = 0
+    for x in range(len(testSet)):
+        if RMSD(testSet[x][-1], predictions[x]) < 1:
+            correct += 1
+    return (correct/float(len(testSet))) * 100.0
+
+
+def RMSD(X, Y):
+    return math.sqrt(pow(Y - X, 2))
 
 
 def main():
@@ -83,7 +95,7 @@ def main():
     # changable values
     split = 0.67
     # number of neighbors
-    k = 3
+    k = 5
     # name of file to get and set data to
     filename = 'apple.csv'
     loadDataset(filename, split, trainingSet, testSet, iv)
@@ -104,8 +116,6 @@ def main():
 # [5.1, 3.5, 1.4, 0.2, 'Iris-setosa']
 # [4.7, 3.2, 1.3, 0.2, 'Iris-setosa']
 
-    print(trainingSet[0])
-    print(testSet[0])
     print('Accuracy: ' + repr(accuracy) + '%')
 
 main()
