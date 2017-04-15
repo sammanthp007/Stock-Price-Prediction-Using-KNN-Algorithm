@@ -11,7 +11,7 @@ import plotly.graph_objs as go
 
 # We will look at stock prices over the past year, starting at January 1, 2016
 # CHANGABLE VARIABLES
-start = datetime.datetime(2015,1,1)
+start = datetime.datetime(2001,1,1)
 end = datetime.date.today()
 
 # Let's get Apple stock data; Apple's ticker symbol is AAPL
@@ -29,6 +29,7 @@ plt.figure(1)
 plt.subplot(2, 1, 1)
 plt.plot(stocks1)
 plt.grid(True)
+plt.title("Apple VS Disney")
 # lines1, labels1 = ax1.get_legend_handles_labels()
 # 
 # ax1.legend(lines1[:2], labels1[:2], loc="best")
@@ -39,6 +40,7 @@ plt.plot(stock_return)
 plt.grid(True)
 plt.legend("a", "b")
 plt.axhline(y=1, linewidth=2, color = 'k')
+plt.title("Total return so far")
 # stock_return.plot(grid = True).axhline(y = 1, color = "black", lw = 2)
 
 # For NUGT and DUST
@@ -49,6 +51,7 @@ stocks2 = pd.DataFrame({"NUGT": nugt["Adj Close"],
                       "DUST": dust["Adj Close"]})
 plt.plot(stocks2)
 plt.grid(True)
+plt.title("NUGT VS DUST")
 # lines2, labels2 = ax2.get_legend_handles_labels()
 
 plt.subplot(2, 1, 2)
@@ -57,5 +60,6 @@ plt.plot(stock_return2)
 plt.grid(True)
 plt.legend("a", "b")
 plt.axhline(y=1, linewidth=2, color = 'k')
+plt.title("Total return")
 #ax1.legend(lines2[:2], labels2[:2], loc="best")
 plt.show()
