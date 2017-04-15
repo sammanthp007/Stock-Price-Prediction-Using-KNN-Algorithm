@@ -29,7 +29,6 @@ def euclideanDistance(instance1, instance2, length):
     distance = 0
     for x in range(length):
         distance += pow((instance1[x] - instance2[x]), 2)
-    print
     return math.sqrt(distance)
 
 
@@ -41,6 +40,7 @@ def getNeighbors(trainingSet, testInstance, k):
     for x in range((len(trainingSet))):
         dist = euclideanDistance(testInstance, trainingSet[x], length)
         distance.append((trainingSet[x], dist))
+    # sort based on the the item at index 1 i.e the distance
     distance.sort(key=operator.itemgetter(1))
     neighbors = []
     for x in range(k):
@@ -49,9 +49,9 @@ def getNeighbors(trainingSet, testInstance, k):
 
 
 trainSet = [[2, 2, 2, 'a'], [4, 4, 4, 'b']]
-testInstance = [5, 5, 5]
-k = 1
-neighbors = getNeighbors(trainSet, testInstance, 1)
+testInstance = [3, 3, 3]
+k = 2
+neighbors = getNeighbors(trainSet, testInstance, k)
 print(neighbors)
 
 
