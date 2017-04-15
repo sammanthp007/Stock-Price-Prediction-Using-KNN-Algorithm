@@ -87,12 +87,10 @@ The data is in CSV format without a header line of any quotes. We can open with
 the open function and read data lines using the reader function in the csv
 module
 
-```
-import csv
-with open('iris.data', 'rb') as csvfile:
-	lines = csv.reader(csvfile)
-	for row in lines:
-		print ', '.join(row)
-```
+Next we need to split the data into a training dataset that kNN can use to make
+predictions and a test dataset that we can use to evaluate the accuracy of the
+model.
 
-
+We first need to convert the flower measures that were loaded as strings into
+numbers that we can work with. Next we need to split the data set randomly into
+train and datasets. A ratio of 67/33 for train/test is a standard ratio used.

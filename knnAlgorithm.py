@@ -3,6 +3,9 @@ import random
 import math
 import operator
 
+import pandas_datareader.data as web
+import datetime
+
 # split the data into a trainingdataset and testdataset in ratio of 67/33
 def loadDataset(filename, split, trainingSet=[], testSet=[], content_header=[]):
     # open the file
@@ -23,6 +26,10 @@ def loadDataset(filename, split, trainingSet=[], testSet=[], content_header=[]):
                 trainingSet.append(dataset[x])
             else:
                 testSet.append(dataset[x])
+
+
+
+
 
 
 def euclideanDistance(instance1, instance2, length):
@@ -87,12 +94,28 @@ def main():
         neighbors = getNeighbors(trainingSet, testSet[x], k)
         result = getResponse(neighbors)
         predictions.append(result)
-        print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+        # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
 
     accuracy = getAccuracy(testSet, predictions)
 
+# [5.1, 3.5, 1.4, 0.2, 'Iris-setosa']
+# [4.7, 3.2, 1.3, 0.2, 'Iris-setosa']
+
+    print(trainingSet[0])
+    print(testSet[0])
     print("Train: " + repr(len(trainingSet)))
     print("Train: " + repr(len(testSet)))
     print('Accuracy: ' + repr(accuracy) + '%')
 
 main()
+
+def getData():
+    start = datetime.datetime(2001,1,1)
+    end = datetime.date.today()
+    apple = web.DataReader('AAPL', 'yahoo', start, end)
+    print(type(apple))
+    for key in apple:
+        print key
+    print(apple)
+
+getData()
