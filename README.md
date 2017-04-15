@@ -62,4 +62,37 @@ learning is a form of unsupervised learning in artificial neural networks, in
 which nodes compete for the right to respond to a subset of the input data. A
 variant of Hebbian learning, competitive learning works by increasing the
 specialization of each node in the network.")
-and [lazy learning](https://en.wikipedia.org/wiki/Lazy_learning "lazy learning is a learning method in which generalization beyond the training data is delayed until a query is made to the system, as opposed to in eager learning, where the system tries to generalize the training data before receiving queries.") algorithms.
+and [lazy learning](https://en.wikipedia.org/wiki/Lazy_learning "lazy learning
+is a learning method in which generalization beyond the training data is
+delayed until a query is made to the system, as opposed to in eager learning,
+where the system tries to generalize the training data before receiving
+queries.") algorithms.
+
+Finally, kNN is powerful because it does not assume anything about the data,
+other than that distance measure can be calculated consistently between any two 
+instances. As such, it is called *non-linear* as it does not assume a 
+functional form.
+
+### Implement kNN
+1. Handle data: Open the dataset from CSV and split into test/train datasets
+2. Similarity: Calculate the distance between two data instances
+3. Neighbors: Locate k most similar data instances
+4. Response: Generate a response from a set of data instances
+5. Accuracy: Summarize the accuracy of predictions
+6. Main: Tie it all together
+
+### 1. Handle Data
+
+The data is in CSV format without a header line of any quotes. We can open with
+the open function and read data lines using the reader function in the csv
+module
+
+```
+import csv
+with open('iris.data', 'rb') as csvfile:
+	lines = csv.reader(csvfile)
+	for row in lines:
+		print ', '.join(row)
+```
+
+
