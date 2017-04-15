@@ -1,5 +1,6 @@
 import csv
 import random
+import math
 
 # split the data into a training dataset and test dataset in ratio of 67/33
 def loadDataset(filename, split, trainingSet=[], testSet=[]):
@@ -21,6 +22,18 @@ def loadDataset(filename, split, trainingSet=[], testSet=[]):
                 trainingSet.append(dataset[x])
             else:
                 testSet.append(dataset[x])
+
+
+def euclideanDistance(instance1, instance2, length):
+    distance = 0
+    for x in range(length):
+        distance += pow((instance1[x] - instance2[x]), 2)
+    return math.sqrt(distance)
+
+data1 = [2,3,4,'s']
+data2 = [4,4,4,'b']
+distance = euclideanDistance(data1, data2, 3)
+print(repr(distance))
 
 
 iv = ["sepal length", "sepal width", "petal length", "petal width"]
