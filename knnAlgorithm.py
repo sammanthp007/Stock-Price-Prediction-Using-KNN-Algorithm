@@ -171,13 +171,13 @@ def main():
     startdate = datetime.datetime(2001,1,1)
     enddate = datetime.date.today()
 
-    # predictFor(5, 'dust.csv', 'DUST', startdate, enddate, 0, split)
-    # predictFor(5, 'apple.csv', 'AAPL', startdate, enddate, 0, split)
-    # predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 0, split)
-    # predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 0, split)
-    # predictFor(5, 'nugt.csv', 'NUGT', startdate, enddate, 0, split)
-    predictFor(5, 'twlo.csv', 'TWLO', startdate, enddate, 1, split)
-    # predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
+    predictFor(5, 'dust.csv', 'DUST', startdate, enddate, 0, split)
+    predictFor(5, 'apple.csv', 'AAPL', startdate, enddate, 0, split)
+    predictFor(5, 'twlo.csv', 'TWLO', startdate, enddate, 0, split)
+    predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 0, split)
+    predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 0, split)
+    predictFor(5, 'nugt.csv', 'NUGT', startdate, enddate, 0, split)
+    predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
 
 
 def predictFor(k, filename, stockname, startdate, enddate, writeAgain, split):
