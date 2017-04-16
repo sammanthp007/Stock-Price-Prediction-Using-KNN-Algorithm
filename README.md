@@ -9,7 +9,7 @@ users in making correct and informed investments decisions.
 ```
 pip install -r requirements.txt
 
-python main.py
+python knnAlgorithm.py
 ```
 
 ## Some Stock Market terminologies
@@ -81,21 +81,21 @@ functional form.
 5. Accuracy: Summarize the accuracy of predictions
 6. Main: Tie it all together
 
-### 1. Handle Data
 
-The data is in CSV format without a header line of any quotes. We can open with
-the open function and read data lines using the reader function in the csv
-module
+### Results
 
-Next we need to split the data into a training dataset that kNN can use to make
-predictions and a test dataset that we can use to evaluate the accuracy of the
-model.
+The following graphs show the result. We achieved a 70% accuracy in the
+prediction. So, a module that will predict, given a stock, will rise tommorow 
+will be posted in coming days. For now, enjoy the graphs and be glad that there
+now exists a ML algorithm that give 70% certainty on if you should buy a certain 
+stock or not.
 
-We first need to convert the flower measures that were loaded as strings into
-numbers that we can work with. Next we need to split the data set randomly into
-train and datasets. A ratio of 67/33 for train/test is a standard ratio used.
+### AMTD:
+![Image]("files/images/amtd.jpg")
 
 
 ## Reference
 [Implement
 kNN](http://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/)
+
+
