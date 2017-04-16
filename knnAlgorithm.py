@@ -28,7 +28,7 @@ def loadDataset(filename, split, trainingSet=[], testSet=[], content_header=[]):
                 trainingSet.append(dataset[x])
             else:
                 testSet.append(dataset[x])
-               #  print(dataset[x])
+
 
 
 def euclideanDistance(instance1, instance2, length):
@@ -104,6 +104,9 @@ def getData(filename, stockname, startdate, enddate):
     stck_json = stock.to_json(orient="index", date_format='iso')
     stck_dates = json.loads(stck_json)
 
+    plt.plot(stock["Adj Close"])
+    plt.title("Stock and Prediction for " + stockname)
+
     first_time = True
     with open(filename, 'wb') as pp:
         stockwriter = csv.writer(pp)
@@ -136,7 +139,6 @@ def predictFor(k, filename, stockname, startdate, enddate, writeAgain, split):
     if writeAgain:
         print("making a network request")
         getData(filename, stockname, startdate, enddate)
-        print("done making a network request")
 
     # open the file
     loadDataset(filename, split, trainingSet, testSet, iv)
@@ -144,6 +146,7 @@ def predictFor(k, filename, stockname, startdate, enddate, writeAgain, split):
     print("Predicting for ", stockname)
     print("Train: " + repr(len(trainingSet)))
     print("Test: " + repr(len(testSet)))
+    print(trainingSet[0])
     totalCount += len(trainingSet) + len(testSet)
     print("Total: " + repr(totalCount))
 
@@ -161,19 +164,50 @@ def predict_and_get_accuracy(testSet, trainingSet, k):
     accuracy = getAccuracy(testSet, predictions)
     print('Accuracy: ' + repr(accuracy) + '%')
 
+    # drawing another
+    plt.figure(2)
+    plt.title("Prediction vs Actual Trend of stock")
+    plt.legend(loc="best")
+    row = []
+    col = []
+    for dates in range(len(testSet)):
+        new_date = datetime.datetime.strptime(testSet[dates][0], "%Y-%M-%d")
+        row.append(new_date)
+        if predictions[dates]== "down":
+            col.append(-1)
+        else:
+            col.append(1)
+    predicted_plt, = plt.plot(row, col, 'r', label="Predicted Trend")
+
+    row = []
+    col = []
+    for dates in range(len(testSet)):
+        new_date = datetime.datetime.strptime(testSet[dates][0], "%Y-%M-%d")
+        row.append(new_date)
+        if testSet[dates][-1]== "down":
+            col.append(-1)
+        else:
+            col.append(1)
+    actual_plt, = plt.plot(row, col, 'b', label="Actual Trend")
+
+    plt.legend(handles=[predicted_plt, actual_plt])
+
+
+    plt.show()
+
 
 def main():
     split = 0.67
     # set data
-    startdate = datetime.datetime(2012,1,1)
+    startdate = datetime.datetime(2002,1,1)
     enddate = datetime.date.today()
 
-    predictFor(5, 'amtd.csv', 'AMTD', startdate, enddate, 1, split)
-    predictFor(5, 'amazon.csv', 'AMZN', startdate, enddate, 1, split)
+    #predictFor(5, 'amtd.csv', 'AMTD', startdate, enddate, 1, split)
+    #predictFor(5, 'amazon.csv', 'AMZN', startdate, enddate, 1, split)
     predictFor(5, 'twlo.csv', 'TWLO', startdate, enddate, 1, split)
-    predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 1, split)
-    predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 1, split)
-    predictFor(5, 'sbux.csv', 'SBUX', startdate, enddate, 1, split)
-    predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
+    #predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 1, split)
+    #predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 1, split)
+    #predictFor(5, 'sbux.csv', 'SBUX', startdate, enddate, 1, split)
+    #predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
 
 main()
