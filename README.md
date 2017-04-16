@@ -90,12 +90,20 @@ will be posted in coming days. For now, enjoy the graphs and be glad that there
 now exists a ML algorithm that give 70% certainty on if you should buy a certain 
 stock or not.
 
-AMTD
-![Image](files/images/amtd.png) ![Image](files/images/amtdprediction.png)
-![Image](files/images/amzn.png)
-![Image](files/images/dis.png)
-![Image](files/images/sbux.png)
-
+amtd
+![Image](files/images/amtd.png) ![Image](files/images/amtdprediction.png) ![Image](files/images/amtdzoomed.png)
+amzn
+![Image](files/images/amzn.png) ![Image](files/images/amznprediction.png) ![Image](files/images/amznzoomed.png)
+dis
+![Image](files/images/dis.png) ![Image](files/images/disprediction.png) ![Image](files/images/diszoomed.png)
+sbux
+![Image](files/images/sbux.png) ![Image](files/images/sbuxprediction.png) ![Image](files/images/sbuxzoomed.png)
+twlo
+![Image](files/images/twlo.png) ![Image](files/images/twloprediction.png) ![Image](files/images/twlozoomed.png)
+twtr
+![Image](files/images/twtr.png) ![Image](files/images/twtrprediction.png) ![Image](files/images/twtrzoomed.png)
+yhoo
+![Image](files/images/yhoo.png) ![Image](files/images/yhooprediction.png) ![Image](files/images/yhoozoomed.png)
 
 ## Reference
 [Implement
