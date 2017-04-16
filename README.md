@@ -5,6 +5,9 @@ order to predict stock proces for a sample of six major companies listed on the
 NASDAQ stock exchange to assist investors, management, decision makers, and
 users in making correct and informed investments decisions.
 
+A more detailed paper on this can be found in
+[final.pdf](files/alldeliverables/final.pdf)
+
 ## To run
 ```
 pip install -r requirements.txt
