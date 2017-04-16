@@ -91,7 +91,10 @@ now exists a ML algorithm that give 70% certainty on if you should buy a certain
 stock or not.
 
 ### AMTD:
-[Image](amtd.png)
+[Image](files/images/amtd.png)
+[Image](files/images/amzn.png)
+[Image](files/images/dis.png)
+[Image](files/images/sbux.png)
 
 
 ## Reference
