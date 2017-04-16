@@ -105,7 +105,7 @@ def getData(filename, stockname, startdate, enddate):
     stck_dates = json.loads(stck_json)
 
     plt.plot(stock["Adj Close"])
-    plt.title("Stock and Prediction for " + stockname)
+    plt.title("Stock movement of " + stockname)
 
     first_time = True
     with open(filename, 'wb') as pp:
@@ -146,15 +146,14 @@ def predictFor(k, filename, stockname, startdate, enddate, writeAgain, split):
     print("Predicting for ", stockname)
     print("Train: " + repr(len(trainingSet)))
     print("Test: " + repr(len(testSet)))
-    print(trainingSet[0])
     totalCount += len(trainingSet) + len(testSet)
     print("Total: " + repr(totalCount))
 
     # generate predictions
-    predict_and_get_accuracy(testSet, trainingSet, k)
+    predict_and_get_accuracy(testSet, trainingSet, k, stockname)
 
 
-def predict_and_get_accuracy(testSet, trainingSet, k):
+def predict_and_get_accuracy(testSet, trainingSet, k, stockname):
     predictions = []
     for x in range(len(testSet)):
         neighbors = getNeighbors(trainingSet, testSet[x], k)
@@ -166,7 +165,7 @@ def predict_and_get_accuracy(testSet, trainingSet, k):
 
     # drawing another
     plt.figure(2)
-    plt.title("Prediction vs Actual Trend of stock")
+    plt.title("Prediction vs Actual Trend of " + stockname)
     plt.legend(loc="best")
     row = []
     col = []
@@ -202,12 +201,12 @@ def main():
     startdate = datetime.datetime(2002,1,1)
     enddate = datetime.date.today()
 
-    #predictFor(5, 'amtd.csv', 'AMTD', startdate, enddate, 1, split)
-    #predictFor(5, 'amazon.csv', 'AMZN', startdate, enddate, 1, split)
+    predictFor(5, 'amtd.csv', 'AMTD', startdate, enddate, 1, split)
+    predictFor(5, 'amazon.csv', 'AMZN', startdate, enddate, 1, split)
+    predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 1, split)
+    predictFor(5, 'sbux.csv', 'SBUX', startdate, enddate, 1, split)
     predictFor(5, 'twlo.csv', 'TWLO', startdate, enddate, 1, split)
-    #predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 1, split)
-    #predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 1, split)
-    #predictFor(5, 'sbux.csv', 'SBUX', startdate, enddate, 1, split)
-    #predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
+    predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
+    predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 1, split)
 
 main()
