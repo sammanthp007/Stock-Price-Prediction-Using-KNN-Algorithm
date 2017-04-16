@@ -5,11 +5,11 @@ import operator
 
 import pandas_datareader.data as web
 import datetime
+import pandas as pd
 
 import matplotlib.pyplot as plt   # Import matplotlib
 import json
 
-forDate = []
 # split the data into a trainingdataset and testdataset in ratio of 67/33
 
 def loadDataset(filename, split, trainingSet=[], testSet=[], content_header=[]):
@@ -85,40 +85,9 @@ def getAccuracy1(testSet, predictions):
             correct += 1
     return (correct/float(len(testSet))) * 100.0
 
-def drawGraph(testSet, predictions):
-    toFloatPredictions = []
-    toFloatTestSet = []
-    for i in predictions:
-        if i == "up":
-            toFloatPredictions.append(1)
-        else:
-            toFloatPredictions.append(-1)
-
-    for x in range(len(testSet)):
-        if testSet[x][-1] == "up":
-            toFloatTestSet.append(1)
-        else:
-            toFloatTestSet.append(-1)
-    # print(toFloatTestSet[0], len(toFloatTestSet), toFloatTestSet)
-    # print(toFloatPredictions[0], len(toFloatPredictions))
-    plt.plot(toFloatTestSet, toFloatPredictions)
-    # plt.show()
-
-
-
 
 def RMSD(X, Y):
     return math.sqrt(pow(Y - X, 2))
-
-
-def getData1(filename, startdate, enddate):
-    apple = web.DataReader('AAPL', 'yahoo', startdate, enddate)
-    print(apple.keys())
-    with open('apple.csv', 'wb') as csvfile:
-        stockwriter = csv.writer(csvfile, quotechar=',')
-        for ind in range(len(apple.Open)):
-            stockwriter.writerow([apple.High[ind]] + [apple.Low[ind]] +
-                    [apple['Adj Close'][ind]])
 
 
 def change(today, yest):
@@ -127,35 +96,27 @@ def change(today, yest):
     return 'down'
 
 
+
 def getData(filename, stockname, startdate, enddate):
-    apple = web.DataReader(stockname, 'yahoo', startdate, enddate)
+    stock = web.DataReader(stockname, 'yahoo', startdate, enddate)
     print("done making network call")
-    ass = [apple.index]
-    stck_json = apple.to_json(orient="index", date_format='iso')
+    ass = [stock.index]
+    stck_json = stock.to_json(orient="index", date_format='iso')
     stck_dates = json.loads(stck_json)
 
     first_time = True
     with open(filename, 'wb') as pp:
         stockwriter = csv.writer(pp)
-        for i in stck_dates.keys():
+        stp = sorted(stck_dates.keys())
+        for i in stp:
             new_format_date = i[:10]
             if first_time:
                 first_time = False
                 prev_closing = stck_dates[i]["Adj Close"]
                 continue
-            # print(new_format_date)
-            # p = datetime.datetime.strptime(new_format_date, '%Y-%M-%d')
-            # print(p)
             stockwriter.writerow([new_format_date] + [stck_dates[i]["Open"]] +  [stck_dates[i]["High"]] + [stck_dates[i]["Low"]]  +  [stck_dates[i]["Adj Close"]] + [change(stck_dates[i]["Adj Close"], prev_closing)])
             prev_closing = stck_dates[i]["Adj Close"]
 
-#     with open(filename, 'wb') as csvfile:
-#         stockwriter = csv.writer(csvfile, quotechar=',')
-#         for ind in range(1, len(apple.Open)):
-#             stockwriter.writerow([apple.Open[ind - 1]] + [apple.High[ind - 1]]
-#                     + [apple.Low[ind - 1]] + [apple['Adj Close'][ind - 1]] +
-#                     [change(apple['Adj Close'][ind], apple['Adj Close'][ind -
-#                         1])])
 
 def abc(filename, stockname, startdate, enddate):
     apple = web.DataReader(stockname, 'yahoo', startdate, enddate)
@@ -165,27 +126,13 @@ def abc(filename, stockname, startdate, enddate):
             stockwriter.writerow(["open: "] + [apple.Open[ind - 1]] + ["    high: "] + [apple.High[ind - 1]] + ["   low: "] + [apple.Low[ind - 1]] + ["  yester close: "] + [apple['Adj Close'][ind - 1]] + [" volume: "] + [apple.Volume[ind - 1]] + [change(apple['Adj Close'][ind], apple['Adj Close'][ind - 1])])
 
 
-def main():
-    split = 0.67
-    # set data
-    startdate = datetime.datetime(2001,1,1)
-    enddate = datetime.date.today()
-
-    predictFor(5, 'dust.csv', 'DUST', startdate, enddate, 0, split)
-    predictFor(5, 'apple.csv', 'AAPL', startdate, enddate, 0, split)
-    predictFor(5, 'twlo.csv', 'TWLO', startdate, enddate, 0, split)
-    predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 0, split)
-    predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 0, split)
-    predictFor(5, 'nugt.csv', 'NUGT', startdate, enddate, 0, split)
-    predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
-
 
 def predictFor(k, filename, stockname, startdate, enddate, writeAgain, split):
     iv = ["date", "open", "high", "low", "yesterday closing adj", "state change"]
     trainingSet = []
     testSet = []
+    totalCount = 0
 
-    # abc('abc.csv', stockname, start, enddate)
     if writeAgain:
         print("making a network request")
         getData(filename, stockname, startdate, enddate)
@@ -197,9 +144,12 @@ def predictFor(k, filename, stockname, startdate, enddate, writeAgain, split):
     print("Predicting for ", stockname)
     print("Train: " + repr(len(trainingSet)))
     print("Test: " + repr(len(testSet)))
+    totalCount += len(trainingSet) + len(testSet)
+    print("Total: " + repr(totalCount))
 
     # generate predictions
     predict_and_get_accuracy(testSet, trainingSet, k)
+
 
 def predict_and_get_accuracy(testSet, trainingSet, k):
     predictions = []
@@ -207,13 +157,23 @@ def predict_and_get_accuracy(testSet, trainingSet, k):
         neighbors = getNeighbors(trainingSet, testSet[x], k)
         result = getResponse(neighbors)
         predictions.append(result)
-        # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
 
     accuracy = getAccuracy(testSet, predictions)
     print('Accuracy: ' + repr(accuracy) + '%')
 
-    drawGraph(testSet, predictions)
 
+def main():
+    split = 0.67
+    # set data
+    startdate = datetime.datetime(2012,1,1)
+    enddate = datetime.date.today()
 
+    predictFor(5, 'amtd.csv', 'AMTD', startdate, enddate, 1, split)
+    predictFor(5, 'amazon.csv', 'AMZN', startdate, enddate, 1, split)
+    predictFor(5, 'twlo.csv', 'TWLO', startdate, enddate, 1, split)
+    predictFor(5, 'disney.csv', 'DIS', startdate, enddate, 1, split)
+    predictFor(5, 'yahoo.csv', 'YHOO', startdate, enddate, 1, split)
+    predictFor(5, 'sbux.csv', 'SBUX', startdate, enddate, 1, split)
+    predictFor(5, 'twtr.csv', 'TWTR', startdate, enddate, 1, split)
 
 main()
