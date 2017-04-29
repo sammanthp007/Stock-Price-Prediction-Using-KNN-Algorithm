@@ -10,6 +10,8 @@ A more detailed paper on this can be found in
 
 ## To run
 ```
+cd <this directory>
+
 pip install -r requirements.txt
 
 python knnAlgorithm.py
