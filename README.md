@@ -1,4 +1,4 @@
-_Note: It has been a whiel since this project has been updated. As you work through the code, if you feel like this can be updated, even slightly, feel free to send in a PR_
+_Note: It has been a while since this project has been updated. As you work through the code, if you feel like this can be updated, even slightly, feel free to send in a PR_
 
 # Stock Prediction Using *K*-Nearest Neighbor (*k*NN) Algorithm
 
